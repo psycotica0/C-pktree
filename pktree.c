@@ -119,7 +119,10 @@ struct spatial_lookup *subdivide(struct spatial_lookup *tree, size_t num_childre
 			temp.y2 = temp.y1 + height;
 
 			for (i=0; i < num_children; i++) {
-				if (tree_contains_point(&temp, children[i]->x1, children[i]->y1)) count++;
+				/* If it's a point, x2 == x1, so I can pick either. */
+				/* If it's a subcell, then (x2,y2) is my inclusive edge. */
+				/* So, I want that because equal values there are considered in */
+				if (tree_contains_point(&temp, children[i]->x2, children[i]->y2)) count++;
 			}
 
 			if (count >= tree->rank)
@@ -192,7 +195,7 @@ int spatial_lookup_insert(struct spatial_lookup *tree, int x, int y, void *data)
 			size_t i;
 			/* Move the items into that and then check again */
 			for (i=0; i < tree->num_children; i++) {
-				if (tree_contains_point(subdivision, tree->children[i]->x1, tree->children[i]->y1)) {
+				if (tree_contains_point(subdivision, tree->children[i]->x2, tree->children[i]->y2)) {
 					/* This child is contained inside subdivision */
 					subdivision->children[subdivision->num_children] = tree->children[i];
 					subdivision->num_children++;
