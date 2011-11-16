@@ -77,10 +77,8 @@ void cleanup_spatial_lookup(struct spatial_lookup *tree) {
 
 int tree_contains_point(struct spatial_lookup *tree, int x, int y) {
 	/* These first two see if this point equals a point cell */
-	if ((x == tree->x1) && (x == tree->x2))
-		return 1;
-
-	if ((y == tree->y1) && (y == tree->y2))
+	if ((x == tree->x1) && (x == tree->x2) &&
+	    (y == tree->y1) && (y == tree->y2))
 		return 1;
 
 	/* Now the range cell */
