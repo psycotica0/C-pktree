@@ -202,6 +202,9 @@ int spatial_lookup_insert(struct spatial_lookup *tree, int x, int y, void *data)
 					i--;
 				}
 			}
+			/* Now link the subdivision as my child */
+			tree->children[tree->num_children] = subdivision;
+			tree->num_children++;
 		}
 	}
 
