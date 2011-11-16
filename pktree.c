@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include "spatial.h"
 
@@ -223,4 +225,41 @@ size_t spatial_lookup_circle_range(struct spatial_lookup* tree, int cx, int cy, 
 
 size_t spatial_lookup_rectangle_range(struct spatial_lookup* tree, int x1, int y1, int x2, int y2, void ***data) {
 	return 0;
+}
+
+/* This function requires that prefix is a NULL terminated string */
+void spatial_debug_output_internal(FILE *file, struct spatial_lookup *tree, char *prefix) {
+	char *working;
+	size_t len;
+	size_t i;
+
+	len = strlen(prefix)+1;
+	/* +1 because of the null character */
+	working = calloc(len + 1, sizeof *working);
+	/* TODO: ERROR CHECKING */
+
+	strcpy(working, prefix);
+	strcat(working, "a");
+
+	/* Technically, if this is true then it shouldn't have children, but I'll leave it */
+	/* Might help me catch bugs */
+	if (tree->x1 == tree->x2 && tree->y1 == tree->y2)
+		fprintf(file,"%s [label=\"(%d,%d)\"];\n", prefix, tree->x1, tree->y1);
+
+	for (i=0; i < tree->num_children; i++) {
+		/* Draw the link between this node and the child */
+		fprintf(file, "%s -> %s;\n", prefix, working);
+		/* Then draw the children */
+		spatial_debug_output_internal(file, tree->children[i], working);
+		/* If we have more than 26 children this could get messy... */
+		working[len-1]++;
+	}
+
+	free(working);
+}
+
+void spatial_debug_output(FILE *file, struct spatial_lookup *tree) {
+	fputs("digraph  {\n", file);
+	spatial_debug_output_internal(file, tree, "R");
+	fputs("}\n", file);
 }

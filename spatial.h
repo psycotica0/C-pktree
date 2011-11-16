@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 struct spatial_lookup;
 
 /* This function gives you a new opaque structure to use */
@@ -25,3 +25,6 @@ size_t spatial_lookup_circle_range(struct spatial_lookup*, int cx, int cy, float
 
 /* This function returns all elements within the rectangle given by the four points [(x1,y1),(x1,y2),(x2,y2),(x2,y1)] */
 size_t spatial_lookup_rectangle_range(struct spatial_lookup*, int x1, int y1, int x2, int y2, void ***data);
+
+/* This function spits out the tree to the given FILE in dot format. */
+void spatial_debug_output(FILE *file, struct spatial_lookup*);

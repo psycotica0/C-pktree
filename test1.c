@@ -11,9 +11,12 @@ int main(int argc, char **argv) {
 	int xs[] = {2, 13, 2, 11, 11, 9, 11};
 	int ys[] = {2, 5, 13, 5, 7, 6, 1};
 
-	puts("Inserting");
-	for (i=0; i < sizeof(strings); i++) {
+	puts("Inserting:");
+	for (i=0; i < (sizeof(strings) / sizeof(*strings)); i++) {
+		printf("%s (%d, %d)\n", strings[i], xs[i], ys[i]);
 		spatial_lookup_insert(look, xs[i], ys[i], strings[i]);
+		puts("Outputting:");
+		spatial_debug_output(stderr, look);
 	}
 
 	puts("Nearest K:");
